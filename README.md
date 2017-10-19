@@ -11,7 +11,7 @@ Find some useful links below:
 
 ## Latest API Docs 
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-jms/api/1.0.9">1.0.9</a>.
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-jms/api/1.0.10-SNAPSHOT">1.0.10-SNAPSHOT</a>.
 
 ## How to use 
 
