@@ -90,8 +90,8 @@ public class JMSPublisher implements Runnable {
             message.writeBytes(data);
             return message;
         } else {
-            throw new JMSSinkAdaptorRuntimeException("The type of the output payload cannot be cast to String, " +
-                    "Map or Byte[] from JMS");
+            throw new JMSSinkAdaptorRuntimeException("The message type of the JMS message "
+                    + message.getClass() + " is not supported!");
         }
     }
 }

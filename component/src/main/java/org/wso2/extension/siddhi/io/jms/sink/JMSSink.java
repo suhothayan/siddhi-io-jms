@@ -135,8 +135,9 @@ public class JMSSink extends Sink {
         try {
             this.clientConnector = new JMSConnectorFactoryImpl().createClientConnector(jmsStaticProperties);
         } catch (JMSConnectorException e) {
-            log.error("Error connecting to JMS provider. " + e.getMessage());
-            throw new ConnectionUnavailableException("Error connecting to JMS provider." + e.getMessage(), e);
+            log.error("Error while connecting to JMS provider at destination: " + destination);
+            throw new ConnectionUnavailableException("Error while connecting to JMS provider at destination: "
+                    + destination, e);
         }
     }
 
