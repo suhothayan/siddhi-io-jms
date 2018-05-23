@@ -89,7 +89,7 @@ public class JMSMessageProcessor implements JMSListener {
                 String[] transportProperties = populateTransportHeaders(message);
                 sourceEventListener.onEvent(message, transportProperties);
             } else {
-                throw new JMSInputAdaptorRuntimeException("The message type of the JMS message"
+                throw new JMSInputAdaptorRuntimeException("The message type of the JMS message "
                         + message.getClass() + " is not supported!");
             }
             // ACK only if the event is processed i.e: no exceptions thrown from the onEvent method.
@@ -97,14 +97,14 @@ public class JMSMessageProcessor implements JMSListener {
                 jmsCallback.done(true);
             }
         } catch (JMSConnectorException | JMSException e) {
-            throw new JMSInputAdaptorRuntimeException("Failed to process JMS message.", e);
+            throw new JMSInputAdaptorRuntimeException("Failed to process JMS message " +
+                    " for the stream:" + sourceEventListener.getStreamDefinition().getId(), e);
         }
     }
 
     private String[] populateTransportHeaders(Message message) throws JMSException, JMSConnectorException {
         if (requestedTransportPropertyNames.length > 0) {
             //cannot be null according to siddhi impl
-            message.getPropertyNames();
             String[] properties = new String[requestedTransportPropertyNames.length];
             int i = 0;
             for (String property : requestedTransportPropertyNames) {

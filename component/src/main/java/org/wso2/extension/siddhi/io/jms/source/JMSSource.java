@@ -19,6 +19,7 @@
 package org.wso2.extension.siddhi.io.jms.source;
 
 import org.apache.log4j.Logger;
+import org.wso2.extension.siddhi.io.jms.source.exception.JMSInputAdaptorRuntimeException;
 import org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
@@ -157,7 +158,10 @@ public class JMSSource extends Source {
         try {
             jmsServerConnector = new JMSServerConnectorImpl(null, properties, jmsMessageProcessor);
         } catch (JMSConnectorException e) {
-            log.error("Error sending JMS message: ", e);
+            log.error("Error occurred in initializing the JMS receiver for stream: " +
+                    sourceEventListener.getStreamDefinition().getId());
+            throw new JMSInputAdaptorRuntimeException("Error occurred in initializing the JMS receiver for stream: " +
+                    sourceEventListener.getStreamDefinition().getId(), e);
         }
     }
 

@@ -19,11 +19,11 @@
 package org.wso2.extension.siddhi.io.jms.sink;
 
 import org.apache.log4j.Logger;
+import org.wso2.extension.siddhi.io.jms.sink.exception.JMSSinkAdaptorRuntimeException;
 import org.wso2.transport.jms.contract.JMSClientConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.utils.JMSConstants;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,16 +43,16 @@ public class JMSPublisher implements Runnable {
     private Message message;
 
     public JMSPublisher(String destination, Map<String, String> staticJMSProperties,
-                        JMSClientConnector jmsClientConnector, Object payload)
-            throws UnsupportedEncodingException {
+                        JMSClientConnector jmsClientConnector, Object payload) {
         this.jmsProperties = new HashMap<>();
         this.jmsProperties.putAll(staticJMSProperties);
         this.jmsProperties.put(JMSConstants.PARAM_DESTINATION_NAME, destination);
         this.jmsClientConnector = jmsClientConnector;
         try {
             this.message = handleMessage(payload);
-        } catch (JMSConnectorException | JMSException e) {
-            log.error("Failed to process payload: " + e.getMessage());
+        } catch (JMSException | JMSConnectorException e) {
+            throw new JMSSinkAdaptorRuntimeException("Error while processing the JMS message to destination "
+                    + destination, e);
         }
     }
 
@@ -61,12 +61,14 @@ public class JMSPublisher implements Runnable {
         try {
             jmsClientConnector.send(message, jmsProperties.get(JMSConstants.PARAM_DESTINATION_NAME));
         } catch (JMSConnectorException e) {
-            log.error("Error sending JMS message: " + e.getMessage());
+            log.error("Error sending JMS message to destination: "
+                    + jmsProperties.get(JMSConstants.PARAM_DESTINATION_NAME), e);
+            throw new JMSSinkAdaptorRuntimeException("Error sending JMS message to destination:"
+                    + jmsProperties.get(JMSConstants.PARAM_DESTINATION_NAME), e);
         }
     }
 
-    private Message handleMessage(Object payload) throws UnsupportedEncodingException,
-            JMSConnectorException, JMSException {
+    private Message handleMessage(Object payload) throws JMSException, JMSConnectorException {
         if (payload instanceof String) {
             TextMessage message = (TextMessage) jmsClientConnector.createMessage(JMSConstants.TEXT_MESSAGE_TYPE);
             message.setText(payload.toString());
@@ -77,7 +79,8 @@ public class JMSPublisher implements Runnable {
                 try {
                     message.setObject((String) key, value);
                 } catch (JMSException e) {
-                    log.error("Error while adding into message properties. " + e.getMessage());
+                    throw new JMSSinkAdaptorRuntimeException("Error while adding property " + key + " and value"
+                            + value + " into message properties.", e);
                 }
             });
             return message;
@@ -87,8 +90,8 @@ public class JMSPublisher implements Runnable {
             message.writeBytes(data);
             return message;
         } else {
-            throw new UnsupportedEncodingException(
-                    "The type of the output payload cannot be cast to String, Map or Byte[] from JMS");
+            throw new JMSSinkAdaptorRuntimeException("The message type of the JMS message "
+                    + message.getClass() + " is not supported!");
         }
     }
 }
