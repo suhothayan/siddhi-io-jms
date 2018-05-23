@@ -36,7 +36,6 @@ import org.wso2.transport.jms.contract.JMSClientConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
@@ -137,17 +136,15 @@ public class JMSSink extends Sink {
             this.clientConnector = new JMSConnectorFactoryImpl().createClientConnector(jmsStaticProperties);
         } catch (JMSConnectorException e) {
             log.error("Error connecting to JMS provider. " + e.getMessage());
+            throw new ConnectionUnavailableException("Error connecting to JMS provider." + e.getMessage(), e);
         }
     }
 
     @Override
     public void publish(Object payload, DynamicOptions transportOptions) {
         String topicQueueName = destination.getValue(transportOptions);
-        try {
-            new JMSPublisher(topicQueueName, jmsStaticProperties, clientConnector, payload).run();
-        } catch (UnsupportedEncodingException e) {
-            log.error("Received payload does not support UTF-8 encoding. Hence dropping the event.", e);
-        }
+        executorService.execute(new JMSPublisher(topicQueueName, jmsStaticProperties,
+                clientConnector, payload));
     }
 
     @Override
@@ -162,11 +159,14 @@ public class JMSSink extends Sink {
 
     @Override
     public void disconnect() {
+        if (executorService != null) {
+            executorService.shutdown();
+        }
     }
 
     @Override
     public void destroy() {
-
+        // disconnect() gets called before destroy() which does the cleanup destroy() needs
     }
 
     @Override

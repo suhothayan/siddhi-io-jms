@@ -69,7 +69,6 @@ public class JMSSinkTestCase {
     }
 
     @Test(dependsOnMethods = "jmsTopicPublishTest")
-    //@Test
     public void jmsTopicPublishTest1() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
         ResultContainer resultContainer = new ResultContainer(2);
@@ -79,7 +78,6 @@ public class JMSSinkTestCase {
             Thread listenerThread = new Thread(client);
             listenerThread.start();
             Thread.sleep(1000);
-
             // deploying the execution plan
             SiddhiManager siddhiManager = new SiddhiManager();
             String inStreamDefinition = "" +
@@ -117,7 +115,7 @@ public class JMSSinkTestCase {
             SiddhiManager siddhiManager = new SiddhiManager();
             String inStreamDefinition = "" +
                     "@sink(type='jms', @map(type='xml'),"
-                    + "factory.initial='org.wso2.activemq.jndi.ActiveMQInitialContextFactory', "
+                    + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
                     + "provider.url='vm://localhost',"
                     + "destination='DAS_JMS_OUTPUT_TEST' "
                     + ")" +
@@ -180,8 +178,7 @@ public class JMSSinkTestCase {
         }
     }
 
-    //@Test(dependsOnMethods = "jmsTopicPublishTest")
-    @Test
+    @Test(dependsOnMethods = "jmsTopicPublishTest3")
     public void jmsTopicPublishTest5() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
         ResultContainer resultContainer = new ResultContainer(2);
