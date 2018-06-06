@@ -102,14 +102,14 @@ import static org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper.DESTINATION
                                 + "destination='DAS_JMS_OUTPUT_TEST', "
                                 + "connection.factory.type='topic',"
                                 + "connection.factory.jndi.name='TopicConnectionFactory'"
-                                + ")" +
+                                + ")\n" +
                                 "define stream inputStream (name string, age int, country string);"),
                 @Example(description = "This example shows how to publish to an ActiveMQ queue. "
                         + "Note that we are not providing properties like connection factory type",
                         syntax = "@sink(type='jms', @map(type='xml'), "
                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
                                 + "provider.url='vm://localhost',"
-                                + "destination='DAS_JMS_OUTPUT_TEST')" +
+                                + "destination='DAS_JMS_OUTPUT_TEST')\n" +
                                 "define stream inputStream (name string, age int, country string);")
         }
 )
