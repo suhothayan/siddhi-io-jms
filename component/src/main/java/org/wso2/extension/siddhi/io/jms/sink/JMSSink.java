@@ -95,7 +95,7 @@ import static org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper.DESTINATION
                         defaultValue = "default")
         },
         examples = {
-                @Example(description = "Following example illustrates how to publish to an ActiveMQ topic.",
+                @Example(description = "This example shows how to publish to an ActiveMQ topic.",
                         syntax = "@sink(type='jms', @map(type='xml'), "
                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
                                 + "provider.url='vm://localhost',"
@@ -104,7 +104,7 @@ import static org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper.DESTINATION
                                 + "connection.factory.jndi.name='TopicConnectionFactory'"
                                 + ")" +
                                 "define stream inputStream (name string, age int, country string);"),
-                @Example(description = "Following example illustrates how to publish to an ActiveMQ queue. "
+                @Example(description = "This example shows how to publish to an ActiveMQ queue. "
                         + "Note that we are not providing properties like connection factory type",
                         syntax = "@sink(type='jms', @map(type='xml'), "
                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
