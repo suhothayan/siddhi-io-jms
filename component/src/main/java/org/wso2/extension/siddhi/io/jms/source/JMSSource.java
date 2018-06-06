@@ -118,7 +118,7 @@ import java.util.Map;
                         defaultValue = "default")
         },
         examples = {
-                @Example(description = "Following example illustrates how to connect to an ActiveMQ topic and "
+                @Example(description = "This example shows how to connect to an ActiveMQ topic and "
                         + "receive messages.",
                         syntax = "@source(type='jms', @map(type='json'), "
                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
@@ -126,15 +126,15 @@ import java.util.Map;
                                 + "destination='DAS_JMS_TEST', "
                                 + "connection.factory.type='topic',"
                                 + "connection.factory.jndi.name='TopicConnectionFactory'"
-                                + ")" +
+                                + ")\n" +
                                 "define stream inputStream (name string, age int, country string);"),
-                @Example(description = "Following example illustrates how to connect to an ActiveMQ queue and "
+                @Example(description = "This example shows how to connect to an ActiveMQ queue and "
                         + "receive messages. Note that we are not providing properties like connection factory type",
                         syntax = "@source(type='jms', @map(type='json'), "
                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
                                 + "provider.url='tcp://localhost:61616',"
                                 + "destination='DAS_JMS_TEST' "
-                                + ")" +
+                                + ")\n" +
                                 "define stream inputStream (name string, age int, country string);")
         }
 )
