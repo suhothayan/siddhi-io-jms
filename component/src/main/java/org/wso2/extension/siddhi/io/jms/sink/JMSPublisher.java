@@ -19,30 +19,28 @@
 package org.wso2.extension.siddhi.io.jms.sink;
 
 import org.apache.log4j.Logger;
-import org.wso2.carbon.messaging.CarbonMessage;
-import org.wso2.carbon.messaging.MapCarbonMessage;
-import org.wso2.carbon.messaging.TextCarbonMessage;
-import org.wso2.carbon.messaging.exceptions.ClientConnectorException;
-import org.wso2.carbon.transport.jms.sender.JMSClientConnector;
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
+import org.wso2.extension.siddhi.io.jms.sink.exception.JMSSinkAdaptorRuntimeException;
+import org.wso2.transport.jms.contract.JMSClientConnector;
+import org.wso2.transport.jms.exception.JMSConnectorException;
+import org.wso2.transport.jms.utils.JMSConstants;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import javax.jms.BytesMessage;
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.TextMessage;
 
 /**
  * JMS publisher which creates the message and sends to JMS.
  */
 public class JMSPublisher implements Runnable {
     private static final Logger log = Logger.getLogger(JMSPublisher.class);
-
-    // this field has to be set for the TextCarbonMessage for it to work
-    private static final String MESSAGE_TYPE_FIELD = "JMS_MESSAGE_TYPE";
-    private static final String TEXT_MESSAGE_TYPE = "TextMessage";
-    private static final String BYTE_ARRAY_MESSAGE_TYPE = "ByteMessage";
-
     private Map<String, String> jmsProperties;
     private JMSClientConnector jmsClientConnector;
-    private CarbonMessage message;
+    private Message message;
 
     public JMSPublisher(String destination, Map<String, String> staticJMSProperties,
                         JMSClientConnector jmsClientConnector, Object payload) {
@@ -50,36 +48,50 @@ public class JMSPublisher implements Runnable {
         this.jmsProperties.putAll(staticJMSProperties);
         this.jmsProperties.put(JMSConstants.PARAM_DESTINATION_NAME, destination);
         this.jmsClientConnector = jmsClientConnector;
-        this.message = handleCarbonMessage(payload);
+        try {
+            this.message = handleMessage(payload);
+        } catch (JMSException | JMSConnectorException e) {
+            throw new JMSSinkAdaptorRuntimeException("Error while processing the JMS message to destination "
+                    + destination, e);
+        }
     }
 
     @Override
     public void run() {
         try {
-            jmsClientConnector.send(message, null, jmsProperties);
-        } catch (ClientConnectorException e) {
-            log.error("Error sending JMS message: ", e);
+            jmsClientConnector.send(message, jmsProperties.get(JMSConstants.PARAM_DESTINATION_NAME));
+        } catch (JMSConnectorException e) {
+            log.error("Error sending JMS message to destination: "
+                    + jmsProperties.get(JMSConstants.PARAM_DESTINATION_NAME), e);
+            throw new JMSSinkAdaptorRuntimeException("Error sending JMS message to destination:"
+                    + jmsProperties.get(JMSConstants.PARAM_DESTINATION_NAME), e);
         }
     }
 
-    private CarbonMessage handleCarbonMessage(Object payload) {
+    private Message handleMessage(Object payload) throws JMSException, JMSConnectorException {
         if (payload instanceof String) {
-            CarbonMessage textCarbonMessage = new TextCarbonMessage(payload.toString());
-            this.jmsProperties.put(MESSAGE_TYPE_FIELD, TEXT_MESSAGE_TYPE);
-            return textCarbonMessage;
+            TextMessage message = (TextMessage) jmsClientConnector.createMessage(JMSConstants.TEXT_MESSAGE_TYPE);
+            message.setText(payload.toString());
+            return message;
         } else if (payload instanceof Map) {
-            MapCarbonMessage mapCarbonMessage = new MapCarbonMessage();
+            MapMessage message = (MapMessage) jmsClientConnector.createMessage(JMSConstants.MAP_MESSAGE_TYPE);
             ((Map) payload).forEach((key, value) -> {
-                mapCarbonMessage.setValue((String) key, (String) value);
+                try {
+                    message.setObject((String) key, value);
+                } catch (JMSException e) {
+                    throw new JMSSinkAdaptorRuntimeException("Error while adding property " + key + " and value"
+                            + value + " into message properties.", e);
+                }
             });
-            return mapCarbonMessage;
-        } else if (payload instanceof Byte[]) {
-            TextCarbonMessage byteCarbonMessage = new TextCarbonMessage(payload.toString());
-            this.jmsProperties.put(MESSAGE_TYPE_FIELD, BYTE_ARRAY_MESSAGE_TYPE);
-            return byteCarbonMessage;
+            return message;
+        } else if (payload instanceof ByteBuffer) {
+            byte[] data = ((ByteBuffer) payload).array();
+            BytesMessage message = (BytesMessage) jmsClientConnector.createMessage(JMSConstants.BYTES_MESSAGE_TYPE);
+            message.writeBytes(data);
+            return message;
         } else {
-            throw new RuntimeException(
-                    "The type of the output payload cannot be cast to String, Map or Byte[] from JMS");
+            throw new JMSSinkAdaptorRuntimeException("The message type of the JMS message "
+                    + message.getClass() + " is not supported!");
         }
     }
 }
