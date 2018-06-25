@@ -34,7 +34,7 @@ import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 public class JMSSinkTestCase {
 
     /**
-     * Test to configure the JMS Sink publish the message to an ActiveMQ topic.
+     * Test for configure the JMS Sink publish the message to an ActiveMQ topic.
      */
     @Test
     public void jmsTopicPublishTest() throws InterruptedException {
@@ -75,7 +75,7 @@ public class JMSSinkTestCase {
     }
 
     /**
-     * Test to configure the JMS Sink publish message to an ActiveMQ queue.
+     * Test for configure the JMS Sink publish message to an ActiveMQ queue.
      */
     @Test(dependsOnMethods = "jmsTopicPublishTest")
     public void jmsTopicPublishTest1() throws InterruptedException {
