@@ -28,8 +28,14 @@ import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 
+/**
+ * Class implementing the Test cases for JMS Sink.
+ */
 public class JMSSinkTestCase {
 
+    /**
+     * Test to configure the JMS Sink publish the message to an ActiveMQ topic.
+     */
     @Test
     public void jmsTopicPublishTest() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
@@ -68,6 +74,9 @@ public class JMSSinkTestCase {
         }
     }
 
+    /**
+     * Test to configure the JMS Sink publish message to an ActiveMQ queue.
+     */
     @Test(dependsOnMethods = "jmsTopicPublishTest")
     public void jmsTopicPublishTest1() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
@@ -91,10 +100,8 @@ public class JMSSinkTestCase {
                     createSiddhiAppRuntime(inStreamDefinition);
             InputHandler inputStream = executionPlanRuntime.getInputHandler("inputStream");
             executionPlanRuntime.start();
-
             inputStream.send(new Object[]{"JAMES", 23, "USA"});
             inputStream.send(new Object[]{"MIKE", 23, "Germany"});
-
             Assert.assertTrue(resultContainer.assertMessageContent("JAMES"));
             Assert.assertTrue(resultContainer.assertMessageContent("MIKE"));
         } finally {
@@ -178,6 +185,9 @@ public class JMSSinkTestCase {
         }
     }
 
+    /**
+     * Test for configure the JMS Sink publish message to an ActiveMQ queue, when payload is an instanceof Binary
+     */
     @Test(dependsOnMethods = "jmsTopicPublishTest3")
     public void jmsTopicPublishTest5() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
@@ -215,6 +225,9 @@ public class JMSSinkTestCase {
         }
     }
 
+    /**
+     * Test for configure the JMS Sink publish message to an ActiveMQ queue,when payload is an instanceof Map.
+     */
     @Test(dependsOnMethods = "jmsTopicPublishTest")
     public void jmsTopicPublishTest6() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
@@ -253,4 +266,3 @@ public class JMSSinkTestCase {
         }
     }
 }
-

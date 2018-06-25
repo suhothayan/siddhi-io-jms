@@ -38,6 +38,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Class implementing the Test cases for JMS Source.
+ */
 public class JMSSourceTestCase {
     private static final String PROVIDER_URL = "vm://localhost?broker.persistent=false,";
     private static Logger log = Logger.getLogger(JMSSourceTestCase.class);
@@ -45,6 +48,9 @@ public class JMSSourceTestCase {
     private int waitTime = 50;
     private int timeout = 30000;
 
+    /**
+     * Test for configure the JMS source to connect to an ActiveMQ topic and receive messages.
+     */
     @Test
     public void testJMSTopicSource1() throws InterruptedException {
         AtomicInteger eventCount = new AtomicInteger(0);
@@ -55,9 +61,11 @@ public class JMSSourceTestCase {
 
         // deploying the execution plan
         SiddhiManager siddhiManager = new SiddhiManager();
-        String inStreamDefinition = "" + "@source(type='jms', @map(type='xml'), "
+        String inStreamDefinition = ""
+                + "@source(type='jms', @map(type='xml'), "
                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', "
+                + "provider.url='vm://localhost',"
+                + "destination='DAS_JMS_TEST', "
                 + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='true', "
@@ -118,7 +126,8 @@ public class JMSSourceTestCase {
         String inStreamDefinition = ""
                 + "@source(type='jms', @map(type='xml'), "
                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', "
+                + "provider.url='vm://localhost',"
+                + "destination='DAS_JMS_TEST', "
                 + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='true', "
@@ -156,7 +165,6 @@ public class JMSSourceTestCase {
                 + "</events>");
         // publishing events
         publishEvents("DAS_JMS_TEST", null, "activemq", "text", messageList);
-
         List<String> expected = new ArrayList<>(2);
         expected.add("John");
         expected.add("Mike");
@@ -165,6 +173,9 @@ public class JMSSourceTestCase {
         siddhiManager.shutdown();
     }
 
+    /**
+     * Test for configure the JMS source to connect to an ActiveMQ queue and receive messages.
+     */
     @Test(dependsOnMethods = "testJMSTopicSource2")
     public void testJMSTopicSource3() throws InterruptedException {
         AtomicInteger eventCount = new AtomicInteger(0);
@@ -204,7 +215,6 @@ public class JMSSourceTestCase {
                 + " {\"event\":{\"name\":\"Mike\",\"age\":23,\"country\":\"US\"}}\n" + "]");
         // publishing events
         publishEvents(null, "DAS_JMS_TEST", "activemq", "text", messageList);
-
         List<String> expected = new ArrayList<>(2);
         expected.add("John");
         expected.add("Mike");
@@ -226,10 +236,12 @@ public class JMSSourceTestCase {
         SiddhiManager siddhiManager = new SiddhiManager();
         String inStreamDefinition = "" + "@source(type='jms', @map(type='xml'), "
                 + "provider.url='vm://localhost',"
-                + "destination='DAS_JMS_TEST', " + "connection.factory.type='topic',"
+                + "destination='DAS_JMS_TEST', "
+                + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='true', "
-                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'" + ")"
+                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'"
+                + ")"
                 + "define stream inputStream (name string, age int, country string);";
         String query = ("@info(name = 'query1') "
                 + "from inputStream "
@@ -251,6 +263,9 @@ public class JMSSourceTestCase {
         siddhiManager.shutdown();
     }
 
+    /**
+     * Test for configure the JMS source with pausing and resuming functionality.
+     */
     @Test
     public void testJMSTopicSourcePause() throws InterruptedException {
         AtomicInteger eventCount = new AtomicInteger(0);
@@ -259,7 +274,6 @@ public class JMSSourceTestCase {
         // starting the ActiveMQ broker
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(PROVIDER_URL);
         List<String> messageList = new ArrayList<>(1);
-
 
         // deploying the execution plan
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -327,6 +341,9 @@ public class JMSSourceTestCase {
         siddhiManager.shutdown();
     }
 
+    /**
+     * Test the Connection Unavailable Exception
+     */
     @Test
     public void testJMSTopicSource5() throws InterruptedException {
         log.info("Test with connection unavailable exception");
@@ -343,7 +360,8 @@ public class JMSSourceTestCase {
         String inStreamDefinition = "" + "@source(type='jms', @map(type='xml'),"
                 + "factory.initial='org.apache.mb.jndi.MBInitialContextFactory', "
                 + "provider.url='vm://localhost',"
-                + "destination='DAS_JMS_TEST', " + "connection.factory.type='topic',"
+                + "destination='DAS_JMS_TEST', "
+                + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='true', "
                 + "transport.jms.DurableSubscriberClientID='wso2dasclient1'"
@@ -368,6 +386,10 @@ public class JMSSourceTestCase {
         siddhiManager.shutdown();
     }
 
+    /**
+     * Test for configure the JMS source to connect to an ActiveMQ topic and receive messages,
+     * when message is an instanceof Map.
+     */
     @Test
     public void testJMSTopicSource6() throws InterruptedException {
         AtomicInteger eventCount = new AtomicInteger(0);
@@ -404,7 +426,6 @@ public class JMSSourceTestCase {
             }
         });
         executionPlanRuntime.start();
-
         List<String> messageList = new ArrayList<String>(2);
         messageList.add("name(name):John\nage(age):23\ncountry(country):us");
         messageList.add("name(name):Mike\nage(age):23\ncountry(country):us");
@@ -430,7 +451,8 @@ public class JMSSourceTestCase {
         // deploying the execution plan
         SiddhiManager siddhiManager = new SiddhiManager();
         String inStreamDefinition =
-                "@source(type='jms'," + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                "@source(type='jms',"
+                        + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
                         + "provider.url='vm://localhost',"
                         + "destination='DAS_JMS_TEST', "
                         + "connection.factory.type='topic',"
