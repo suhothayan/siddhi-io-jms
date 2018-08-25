@@ -159,9 +159,9 @@
         <geronimo-jta.version>1.1.1</geronimo-jta.version>
         <transport.version>6.0.50</transport.version>
         <binary.mapper.version>1.0.11</binary.mapper.version>
-        <xml.mapper.version>4.0.14</xml.mapper.version>
-        <json.mapper.version>4.0.23</json.mapper.version>
-        <keyvalue.mapper.version>1.0.13</keyvalue.mapper.version>
+        <xml.mapper.version>4.0.16</xml.mapper.version>
+        <json.mapper.version>4.0.29</json.mapper.version>
+        <keyvalue.mapper.version>1.0.15</keyvalue.mapper.version>
         <mavan.findbugsplugin.exclude.file>findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
         <mavan.checkstyle.suppression.file>checkstyle-suppressions.xml</mavan.checkstyle.suppression.file>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
