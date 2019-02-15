@@ -28,7 +28,7 @@
 
     <groupId>org.wso2.extension.siddhi.io.jms</groupId>
     <artifactId>siddhi-io-jms-parent</artifactId>
-    <version>1.0.32-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>Siddhi IO JMS Extension Parent</name>
 
     <modules>
@@ -151,13 +151,13 @@
         </plugins>
     </build>
     <properties>
-        <siddhi.version>4.2.17</siddhi.version>
+        <siddhi.version>4.4.8</siddhi.version>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <junit.version>4.12</junit.version>
         <carbon.feature.plugin.version>3.1.3</carbon.feature.plugin.version>
         <geronimo-jms.version>1.1.1</geronimo-jms.version>
         <geronimo-jta.version>1.1.1</geronimo-jta.version>
-        <transport.version>6.0.50</transport.version>
+        <transport.version>6.0.51</transport.version>
         <binary.mapper.version>1.0.15</binary.mapper.version>
         <xml.mapper.version>4.0.18</xml.mapper.version>
         <json.mapper.version>4.0.31</json.mapper.version>
