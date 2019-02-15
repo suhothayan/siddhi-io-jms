@@ -11,7 +11,7 @@ Find some useful links below:
 
 ## Latest API Docs 
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-jms/api/1.0.31">1.0.31</a>.
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-jms/api/1.1.0">1.1.0</a>.
 
 ## How to use 
 
@@ -96,8 +96,8 @@ Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/si
 
 ## Features
 
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-jms/api/1.0.31/#jms-sink">jms</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink">(Sink)</a>*<br><div style="padding-left: 1em;"><p>JMS Sink allows users to subscribe to a JMS broker and publish JMS messages.</p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-jms/api/1.0.31/#jms-source">jms</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source">(Source)</a>*<br><div style="padding-left: 1em;"><p>JMS Source allows users to subscribe to a JMS broker and receive JMS messages. It has the ability to receive Map messages and Text messages.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-jms/api/1.1.0/#jms-sink">jms</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink">(Sink)</a>*<br><div style="padding-left: 1em;"><p>JMS Sink allows users to subscribe to a JMS broker and publish JMS messages.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-jms/api/1.1.0/#jms-source">jms</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source">(Source)</a>*<br><div style="padding-left: 1em;"><p>JMS Source allows users to subscribe to a JMS broker and receive JMS messages. It has the ability to receive Map messages and Text messages.</p></div>
 
 ## How to Contribute
  
