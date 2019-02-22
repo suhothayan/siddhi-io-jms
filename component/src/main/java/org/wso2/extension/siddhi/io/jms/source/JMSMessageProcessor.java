@@ -89,16 +89,16 @@ public class JMSMessageProcessor implements JMSListener {
                 String[] transportProperties = populateTransportHeaders(message);
                 sourceEventListener.onEvent(message, transportProperties);
             } else {
-                throw new JMSInputAdaptorRuntimeException("The message type of the JMS message "
-                        + message.getClass() + " is not supported!");
+                throw new JMSInputAdaptorRuntimeException("The message type of the JMS message " + message.getClass()
+                        + " is not supported!");
             }
             // ACK only if the event is processed i.e: no exceptions thrown from the onEvent method.
             if (jmsCallback != null) {
                 jmsCallback.done(true);
             }
         } catch (JMSConnectorException | JMSException e) {
-            throw new JMSInputAdaptorRuntimeException("Failed to process JMS message " +
-                    " for the stream:" + sourceEventListener.getStreamDefinition().getId(), e);
+            throw new JMSInputAdaptorRuntimeException("Failed to process JMS message for the stream: "
+                    + sourceEventListener.getStreamDefinition().getId(), e);
         }
     }
 
@@ -221,7 +221,6 @@ public class JMSMessageProcessor implements JMSListener {
     }
 
     void disconnect() {
-
     }
 
     @Override
