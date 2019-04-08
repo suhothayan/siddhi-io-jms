@@ -18,9 +18,9 @@
  */
 package org.wso2.extension.siddhi.io.jms.source;
 
+import io.siddhi.core.config.SiddhiAppContext;
+import io.siddhi.core.stream.input.source.SourceEventListener;
 import org.wso2.extension.siddhi.io.jms.source.exception.JMSInputAdaptorRuntimeException;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
 import org.wso2.transport.jms.callback.JMSCallback;
 import org.wso2.transport.jms.contract.JMSListener;
 import org.wso2.transport.jms.exception.JMSConnectorException;
