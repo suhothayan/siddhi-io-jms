@@ -42,8 +42,8 @@ import javax.naming.InitialContext;
 public class JMSClient {
     private Log log = LogFactory.getLog(JMSClient.class);
 
-    public void sendJMSEvents(String filePath, String topicName, String queueName, String format,
-                              String broker, String providerURL) {
+    public void sendJMSEvents(String filePath, String topicName, String queueName, String format, String broker,
+                              String providerURL) {
         if (format == null || "map".equals(format)) {
             format = "csv";
         }
@@ -90,16 +90,15 @@ public class JMSClient {
                             if ("csv".equalsIgnoreCase(format)) {
                                 log.info("Sending Map messages on '" + topicName + "' topic");
                                 JMSClientUtil.publishMapMessage(producer, session, messagesList);
-
                             } else {
                                 log.info("Sending  " + format + " messages on '" + topicName + "' topic");
                                 JMSClientUtil.publishTextMessage(producer, session, messagesList);
                             }
-                            log.info("All Order Messages sent");
+                            log.info("All Order Messages sent.");
                         } catch (JMSException e) {
-                            log.error("Cannot subscribe." + e.getMessage(), e);
+                            log.error("Cannot subscribe. " + e.getMessage(), e);
                         } catch (IOException e) {
-                            log.error("Error when reading the data file." + e.getMessage(), e);
+                            log.error("Error when reading the data file. " + e.getMessage(), e);
                         } finally {
                             producer.close();
                             session.close();
@@ -107,7 +106,7 @@ public class JMSClient {
                         }
                     }
                 } else {
-                    log.error("Error when creating connection factory. Please check necessary jar files");
+                    log.error("Error while creating Connection Factory. Please check necessary jar files.");
                 }
             } else if (queueName != null && !queueName.equalsIgnoreCase("")) {
                 QueueConnection queueConnection;
@@ -143,9 +142,9 @@ public class JMSClient {
                                 JMSClientUtil.publishTextMessage(producer, session, messagesList);
                             }
                         } catch (JMSException e) {
-                            log.error("Cannot subscribe." + e.getMessage(), e);
+                            log.error("Cannot subscribe. " + e.getMessage(), e);
                         } catch (IOException e) {
-                            log.error("Error when reading the data file." + e.getMessage(), e);
+                            log.error("Error while reading the data file. " + e.getMessage(), e);
                         } finally {
                             producer.close();
                             session.close();
@@ -153,13 +152,13 @@ public class JMSClient {
                         }
                     }
                 } else {
-                    log.error("Error when creating connection factory. Please check necessary jar files");
+                    log.error("Error while creating Connection Factory. Please check necessary jar files");
                 }
             } else {
                 log.error("Enter queue name or topic name to be published!");
             }
         } catch (Exception e) {
-            log.error("Error when publishing" + e.getMessage(), e);
+            log.error("Error when publishing. " + e.getMessage(), e);
         }
     }
 
@@ -262,15 +261,14 @@ public class JMSClient {
                             if ("csv".equalsIgnoreCase(format)) {
                                 log.info("Sending Map messages on '" + queueName + "' queue");
                                 JMSClientUtil.publishMapMessage(producer, session, messageList);
-
                             } else {
-                                log.info("Sending  " + format + " messages on '" + queueName + "' queue");
+                                log.info("Sending " + format + " messages on '" + queueName + "' queue");
                                 JMSClientUtil.publishTextMessage(producer, session, messageList);
                             }
                         } catch (JMSException e) {
-                            log.error("Cannot subscribe." + e.getMessage(), e);
+                            log.error("Cannot subscribe. " + e.getMessage(), e);
                         } catch (IOException e) {
-                            log.error("Error when reading the data file." + e.getMessage(), e);
+                            log.error("Error while reading the data file. " + e.getMessage(), e);
                         } finally {
                             producer.close();
                             session.close();
@@ -278,13 +276,13 @@ public class JMSClient {
                         }
                     }
                 } else {
-                    log.error("Error when creating connection factory. Please check necessary jar files");
+                    log.error("Error while creating Connection Factory. Please check necessary jar files.");
                 }
             } else {
                 log.error("Enter queue name or topic name to be published!");
             }
         } catch (Exception e) {
-            log.error("Error when publishing" + e.getMessage(), e);
+            log.error("Error while publishing. " + e.getMessage(), e);
         }
     }
 }

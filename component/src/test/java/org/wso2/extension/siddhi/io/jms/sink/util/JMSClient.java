@@ -39,7 +39,6 @@ public class JMSClient implements Runnable {
     private TopicConsumer topicConsumer;
     private QueueConsumer queueConsumer;
 
-
     public JMSClient(String broker, String topic, String queue, ResultContainer resultContainer) {
         this.broker = broker;
         this.topic = topic;
@@ -73,7 +72,7 @@ public class JMSClient implements Runnable {
                         (TopicConnectionFactory) context.lookup("ConnectionFactory");
                 topicConsumer = new TopicConsumer(topicConnectionFactory, topic, resultContainer);
                 Thread consumerThread = new Thread(topicConsumer);
-                log.info("Starting" + broker + "consumerTopic thread...");
+                log.info("Starting " + broker + " consumerTopic thread...");
                 consumerThread.start();
             } else {
                 Context context = new InitialContext(properties);
@@ -81,7 +80,7 @@ public class JMSClient implements Runnable {
                         (QueueConnectionFactory) context.lookup("ConnectionFactory");
                 queueConsumer = new QueueConsumer(queueConnectionFactory, queue, resultContainer);
                 Thread consumerThread = new Thread(queueConsumer);
-                log.info("Starting" + broker + "consumerQueue thread...");
+                log.info("Starting " + broker + " consumerQueue thread...");
                 consumerThread.start();
             }
         } catch (IOException e) {
@@ -96,7 +95,7 @@ public class JMSClient implements Runnable {
         try {
             listen();
         } catch (InterruptedException e) {
-            log.error("Error starting the JMS consumer: ", e);
+            log.error("Error while starting the JMS consumer: ", e);
         }
     }
 
