@@ -31,7 +31,6 @@
     <artifactId>siddhi-io-jms</artifactId>
     <name>Siddhi Extension - JMS Transport</name>
 
-
     <dependencies>
         <dependency>
             <groupId>io.siddhi</groupId>

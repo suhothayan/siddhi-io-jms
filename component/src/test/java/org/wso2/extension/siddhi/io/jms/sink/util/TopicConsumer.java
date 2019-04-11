@@ -58,7 +58,7 @@ public class TopicConsumer implements Runnable {
             topicConnection = topicConnectionFactory.createTopicConnection();
             topicConnection.start();
         } catch (JMSException e) {
-            log.error("Can not create topic connection." + e.getMessage(), e);
+            log.error("Can not create topic connection. " + e.getMessage(), e);
             return;
         }
         Session session = null;
@@ -100,7 +100,7 @@ public class TopicConsumer implements Runnable {
             topicConnection.stop();
             topicConnection.close();
         } catch (JMSException e) {
-            log.error("Can not subscribe." + e.getMessage(), e);
+            log.error("Can not subscribe. " + e.getMessage(), e);
         }
     }
 

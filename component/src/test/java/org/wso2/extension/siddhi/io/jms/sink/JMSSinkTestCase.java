@@ -117,7 +117,6 @@ public class JMSSinkTestCase {
         SiddhiAppRuntime executionPlanRuntime = null;
         ResultContainer resultContainer = new ResultContainer(2, 5);
         try {
-
             // deploying the execution plan
             SiddhiManager siddhiManager = new SiddhiManager();
             String inStreamDefinition = "" +
@@ -145,7 +144,6 @@ public class JMSSinkTestCase {
     public void jmsTopicPublishTest2() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
         try {
-
             // deploying the execution plan
             SiddhiManager siddhiManager = new SiddhiManager();
             String inStreamDefinition = "" +

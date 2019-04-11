@@ -63,7 +63,7 @@ public class JMSPublisher implements Runnable {
         } catch (JMSConnectorException e) {
             log.error("Error sending JMS message to destination: "
                     + jmsProperties.get(JMSConstants.PARAM_DESTINATION_NAME), e);
-            throw new JMSSinkAdaptorRuntimeException("Error sending JMS message to destination:"
+            throw new JMSSinkAdaptorRuntimeException("Error sending JMS message to destination: "
                     + jmsProperties.get(JMSConstants.PARAM_DESTINATION_NAME), e);
         }
     }
@@ -79,7 +79,7 @@ public class JMSPublisher implements Runnable {
                 try {
                     message.setObject((String) key, value);
                 } catch (JMSException e) {
-                    throw new JMSSinkAdaptorRuntimeException("Error while adding property " + key + " and value"
+                    throw new JMSSinkAdaptorRuntimeException("Error while adding property " + key + " and value "
                             + value + " into message properties.", e);
                 }
             });
@@ -90,8 +90,8 @@ public class JMSPublisher implements Runnable {
             message.writeBytes(data);
             return message;
         } else {
-            throw new JMSSinkAdaptorRuntimeException("The message type of the JMS message "
-                    + message.getClass() + " is not supported!");
+            throw new JMSSinkAdaptorRuntimeException("The message type of the JMS message " + message.getClass()
+                    + " is not supported!");
         }
     }
 }

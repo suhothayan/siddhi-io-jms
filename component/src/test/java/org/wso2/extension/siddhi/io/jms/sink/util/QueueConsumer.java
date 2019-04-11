@@ -56,7 +56,7 @@ public class QueueConsumer implements Runnable {
             queueConnection = queueConnectionFactory.createQueueConnection();
             queueConnection.start();
         } catch (JMSException e) {
-            log.error("Can not create queue connection." + e.getMessage(), e);
+            log.error("Can not create queue connection. " + e.getMessage(), e);
             return;
         }
         Session session;
@@ -98,12 +98,11 @@ public class QueueConsumer implements Runnable {
             queueConnection.stop();
             queueConnection.close();
         } catch (JMSException e) {
-            log.error("Can not subscribe." + e.getMessage(), e);
+            log.error("Cannot subscribe. " + e.getMessage(), e);
         }
     }
 
     public void shutdown() {
         active = false;
     }
-
 }
