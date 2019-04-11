@@ -24,8 +24,11 @@ import io.siddhi.annotation.Parameter;
 import io.siddhi.annotation.util.DataType;
 import io.siddhi.core.config.SiddhiAppContext;
 import io.siddhi.core.exception.ConnectionUnavailableException;
+import io.siddhi.core.stream.ServiceDeploymentInfo;
 import io.siddhi.core.stream.output.sink.Sink;
 import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
 import io.siddhi.core.util.transport.DynamicOptions;
 import io.siddhi.core.util.transport.Option;
 import io.siddhi.core.util.transport.OptionHolder;
@@ -122,12 +125,13 @@ public class JMSSink extends Sink {
     private ExecutorService executorService;
 
     @Override
-    protected void init(StreamDefinition outputStreamDefinition, OptionHolder optionHolder,
-                        ConfigReader sinkConfigReader, SiddhiAppContext executionPlanContext) {
+    protected StateFactory init(StreamDefinition outputStreamDefinition, OptionHolder optionHolder,
+                                ConfigReader sinkConfigReader, SiddhiAppContext executionPlanContext) {
         this.optionHolder = optionHolder;
         this.destination = optionHolder.getOrCreateOption(DESTINATION, null);
         this.jmsStaticProperties = initJMSProperties();
         this.executorService = executionPlanContext.getExecutorService();
+        return null;
     }
 
     @Override
@@ -142,7 +146,7 @@ public class JMSSink extends Sink {
     }
 
     @Override
-    public void publish(Object payload, DynamicOptions transportOptions) {
+    public void publish(Object payload, DynamicOptions transportOptions, State state) {
         String topicQueueName = destination.getValue(transportOptions);
         executorService.execute(new JMSPublisher(topicQueueName, jmsStaticProperties,
                 clientConnector, payload));
@@ -151,6 +155,11 @@ public class JMSSink extends Sink {
     @Override
     public Class[] getSupportedInputEventClasses() {
         return new Class[]{String.class, Map.class, ByteBuffer.class};
+    }
+
+    @Override
+    protected ServiceDeploymentInfo exposedServiceDeploymentInfo() {
+        return null;
     }
 
     @Override

@@ -24,9 +24,12 @@ import io.siddhi.annotation.Parameter;
 import io.siddhi.annotation.util.DataType;
 import io.siddhi.core.config.SiddhiAppContext;
 import io.siddhi.core.exception.ConnectionUnavailableException;
+import io.siddhi.core.stream.ServiceDeploymentInfo;
 import io.siddhi.core.stream.input.source.Source;
 import io.siddhi.core.stream.input.source.SourceEventListener;
 import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
 import io.siddhi.core.util.transport.OptionHolder;
 import org.apache.log4j.Logger;
 import org.wso2.extension.siddhi.io.jms.source.exception.JMSInputAdaptorRuntimeException;
@@ -146,9 +149,9 @@ public class JMSSource extends Source {
     private JMSMessageProcessor jmsMessageProcessor;
 
     @Override
-    public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
-                     String[] requestedTransportPropertyNames, ConfigReader configReader,
-                     SiddhiAppContext siddhiAppContext) {
+    public StateFactory init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
+                             String[] requestedTransportPropertyNames, ConfigReader configReader,
+                             SiddhiAppContext siddhiAppContext) {
         this.sourceEventListener = sourceEventListener;
         this.optionHolder = optionHolder;
         Map<String, String> properties = initJMSProperties();
@@ -163,10 +166,11 @@ public class JMSSource extends Source {
             throw new JMSInputAdaptorRuntimeException("Error occurred in initializing the JMS receiver for stream: " +
                     sourceEventListener.getStreamDefinition().getId(), e);
         }
+        return null;
     }
 
     @Override
-    public void connect(ConnectionCallback connectionCallback) throws ConnectionUnavailableException {
+    public void connect(ConnectionCallback connectionCallback, State state) throws ConnectionUnavailableException {
         //ConnectionCallback is not used as re-connection is handled by carbon transport.
         try {
             jmsServerConnector.start();
@@ -175,6 +179,11 @@ public class JMSSource extends Source {
             throw new ConnectionUnavailableException("Exception in starting the JMS receiver for stream: "
                     + sourceEventListener.getStreamDefinition().getId(), e);
         }
+    }
+
+    @Override
+    protected ServiceDeploymentInfo exposeServiceDeploymentInfo() {
+        return null;
     }
 
     @Override
