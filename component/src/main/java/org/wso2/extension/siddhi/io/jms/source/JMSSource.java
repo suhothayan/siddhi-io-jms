@@ -18,19 +18,22 @@
  */
 package org.wso2.extension.siddhi.io.jms.source;
 
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiAppContext;
+import io.siddhi.core.exception.ConnectionUnavailableException;
+import io.siddhi.core.stream.ServiceDeploymentInfo;
+import io.siddhi.core.stream.input.source.Source;
+import io.siddhi.core.stream.input.source.SourceEventListener;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.core.util.transport.OptionHolder;
 import org.apache.log4j.Logger;
 import org.wso2.extension.siddhi.io.jms.source.exception.JMSInputAdaptorRuntimeException;
 import org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper;
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
-import org.wso2.siddhi.core.stream.input.source.Source;
-import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.core.util.transport.OptionHolder;
 import org.wso2.transport.jms.contract.JMSServerConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.receiver.JMSServerConnectorImpl;
@@ -146,9 +149,9 @@ public class JMSSource extends Source {
     private JMSMessageProcessor jmsMessageProcessor;
 
     @Override
-    public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
-                     String[] requestedTransportPropertyNames, ConfigReader configReader,
-                     SiddhiAppContext siddhiAppContext) {
+    public StateFactory init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
+                             String[] requestedTransportPropertyNames, ConfigReader configReader,
+                             SiddhiAppContext siddhiAppContext) {
         this.sourceEventListener = sourceEventListener;
         this.optionHolder = optionHolder;
         Map<String, String> properties = initJMSProperties();
@@ -163,10 +166,11 @@ public class JMSSource extends Source {
             throw new JMSInputAdaptorRuntimeException("Error occurred in initializing the JMS receiver for stream: " +
                     sourceEventListener.getStreamDefinition().getId(), e);
         }
+        return null;
     }
 
     @Override
-    public void connect(ConnectionCallback connectionCallback) throws ConnectionUnavailableException {
+    public void connect(ConnectionCallback connectionCallback, State state) throws ConnectionUnavailableException {
         //ConnectionCallback is not used as re-connection is handled by carbon transport.
         try {
             jmsServerConnector.start();
@@ -175,6 +179,11 @@ public class JMSSource extends Source {
             throw new ConnectionUnavailableException("Exception in starting the JMS receiver for stream: "
                     + sourceEventListener.getStreamDefinition().getId(), e);
         }
+    }
+
+    @Override
+    protected ServiceDeploymentInfo exposeServiceDeploymentInfo() {
+        return null;
     }
 
     @Override
@@ -233,15 +242,5 @@ public class JMSSource extends Source {
                         carbonPropertyMapping.get(option) == null ? option : carbonPropertyMapping.get(option),
                         optionHolder.validateAndGetStaticValue(option)));
         return transportProperties;
-    }
-
-    @Override
-    public Map<String, Object> currentState() {
-        return null;
-    }
-
-    @Override
-    public void restoreState(Map<String, Object> state) {
-        // no state to restore
     }
 }

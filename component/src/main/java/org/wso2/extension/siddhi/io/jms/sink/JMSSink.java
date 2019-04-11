@@ -18,20 +18,23 @@
  */
 package org.wso2.extension.siddhi.io.jms.sink;
 
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiAppContext;
+import io.siddhi.core.exception.ConnectionUnavailableException;
+import io.siddhi.core.stream.ServiceDeploymentInfo;
+import io.siddhi.core.stream.output.sink.Sink;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.core.util.transport.DynamicOptions;
+import io.siddhi.core.util.transport.Option;
+import io.siddhi.core.util.transport.OptionHolder;
+import io.siddhi.query.api.definition.StreamDefinition;
 import org.apache.log4j.Logger;
 import org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper;
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
-import org.wso2.siddhi.core.stream.output.sink.Sink;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.core.util.transport.DynamicOptions;
-import org.wso2.siddhi.core.util.transport.Option;
-import org.wso2.siddhi.core.util.transport.OptionHolder;
-import org.wso2.siddhi.query.api.definition.StreamDefinition;
 import org.wso2.transport.jms.contract.JMSClientConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
@@ -122,12 +125,13 @@ public class JMSSink extends Sink {
     private ExecutorService executorService;
 
     @Override
-    protected void init(StreamDefinition outputStreamDefinition, OptionHolder optionHolder,
-                        ConfigReader sinkConfigReader, SiddhiAppContext executionPlanContext) {
+    protected StateFactory init(StreamDefinition outputStreamDefinition, OptionHolder optionHolder,
+                                ConfigReader sinkConfigReader, SiddhiAppContext executionPlanContext) {
         this.optionHolder = optionHolder;
         this.destination = optionHolder.getOrCreateOption(DESTINATION, null);
         this.jmsStaticProperties = initJMSProperties();
         this.executorService = executionPlanContext.getExecutorService();
+        return null;
     }
 
     @Override
@@ -142,7 +146,7 @@ public class JMSSink extends Sink {
     }
 
     @Override
-    public void publish(Object payload, DynamicOptions transportOptions) {
+    public void publish(Object payload, DynamicOptions transportOptions, State state) {
         String topicQueueName = destination.getValue(transportOptions);
         executorService.execute(new JMSPublisher(topicQueueName, jmsStaticProperties,
                 clientConnector, payload));
@@ -151,6 +155,11 @@ public class JMSSink extends Sink {
     @Override
     public Class[] getSupportedInputEventClasses() {
         return new Class[]{String.class, Map.class, ByteBuffer.class};
+    }
+
+    @Override
+    protected ServiceDeploymentInfo exposedServiceDeploymentInfo() {
+        return null;
     }
 
     @Override
@@ -168,16 +177,6 @@ public class JMSSink extends Sink {
     @Override
     public void destroy() {
         // disconnect() gets called before destroy() which does the cleanup destroy() needs
-    }
-
-    @Override
-    public Map<String, Object> currentState() {
-        return null;
-    }
-
-    @Override
-    public void restoreState(Map<String, Object> state) {
-
     }
 
     /**
