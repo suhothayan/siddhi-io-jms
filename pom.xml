@@ -26,7 +26,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <groupId>org.wso2.extension.siddhi.io.jms</groupId>
+    <groupId>io.siddhi.extension.io.jms</groupId>
     <artifactId>siddhi-io-jms-parent</artifactId>
     <version>2.0.2-SNAPSHOT</version>
     <name>Siddhi IO JMS Extension Parent</name>
@@ -79,22 +79,22 @@
                 <version>${transport.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.extension.siddhi.map.binary</groupId>
+                <groupId>io.siddhi.extension.map.binary</groupId>
                 <artifactId>siddhi-map-binary</artifactId>
                 <version>${binary.mapper.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.extension.siddhi.map.xml</groupId>
+                <groupId>io.siddhi.extension.map.xml</groupId>
                 <artifactId>siddhi-map-xml</artifactId>
                 <version>${xml.mapper.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.extension.siddhi.map.json</groupId>
+                <groupId>io.siddhi.extension.map.json</groupId>
                 <artifactId>siddhi-map-json</artifactId>
                 <version>${json.mapper.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.extension.siddhi.map.keyvalue</groupId>
+                <groupId>io.siddhi.extension.map.keyvalue</groupId>
                 <artifactId>siddhi-map-keyvalue</artifactId>
                 <version>${keyvalue.mapper.version}</version>
             </dependency>
@@ -151,7 +151,7 @@
         </plugins>
     </build>
     <properties>
-        <siddhi.version>5.0.0-m11</siddhi.version>
+        <siddhi.version>5.0.0</siddhi.version>
         <siddhi.version.range>[5.0.0,6.0.0)</siddhi.version.range>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <junit.version>4.12</junit.version>
@@ -159,10 +159,10 @@
         <geronimo-jms.version>1.1.1</geronimo-jms.version>
         <geronimo-jta.version>1.1.1</geronimo-jta.version>
         <transport.version>6.0.51</transport.version>
-        <binary.mapper.version>2.0.0</binary.mapper.version>
-        <xml.mapper.version>5.0.0</xml.mapper.version>
-        <json.mapper.version>5.0.1</json.mapper.version>
-        <keyvalue.mapper.version>2.0.0</keyvalue.mapper.version>
+        <binary.mapper.version>2.0.1</binary.mapper.version>
+        <xml.mapper.version>5.0.2</xml.mapper.version>
+        <json.mapper.version>5.0.2</json.mapper.version>
+        <keyvalue.mapper.version>2.0.1</keyvalue.mapper.version>
         <mavan.findbugsplugin.exclude.file>findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
         <mavan.checkstyle.suppression.file>checkstyle-suppressions.xml</mavan.checkstyle.suppression.file>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
