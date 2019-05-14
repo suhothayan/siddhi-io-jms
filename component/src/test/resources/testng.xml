@@ -22,8 +22,8 @@
 <suite name="JMS-IO-Test-Suite">
     <test name="jms-tests" enabled="true" preserve-order="true" parallel="false">
         <classes>
-            <class name="org.wso2.extension.siddhi.io.jms.source.JMSSourceTestCase"/>
-            <class name="org.wso2.extension.siddhi.io.jms.sink.JMSSinkTestCase"/>
+            <class name="io.siddhi.extension.io.jms.source.JMSSourceTestCase"/>
+            <class name="io.siddhi.extension.io.jms.sink.JMSSinkTestCase"/>
         </classes>
     </test>
 </suite>
