@@ -2,7 +2,10 @@
 
 ## Sink
 
-### jms *<a target="_blank" href="http://siddhi.io/documentation/siddhi-5.x/query-guide-5.x/#sink">(Sink)</a>*
+!!! Info "Tested Siddhi Core version: *<a target="_blank" href="http://siddhi.io/en/v5.0/docs/query-guide/">5.0.0</a>*"
+    It could also support other Siddhi Core minor versions.
+
+### jms *<a target="_blank" href="https://siddhi.io/en/v5.0/docs/query-guide/#sink">(Sink)</a>*
 
 <p style="word-wrap: break-word">JMS Sink allows users to subscribe to a JMS broker and publish JMS messages.</p>
 
@@ -104,7 +107,7 @@ define stream inputStream (name string, age int, country string);
 
 ## Source
 
-### jms *<a target="_blank" href="http://siddhi.io/documentation/siddhi-5.x/query-guide-5.x/#source">(Source)</a>*
+### jms *<a target="_blank" href="https://siddhi.io/en/v5.0/docs/query-guide/#source">(Source)</a>*
 
 <p style="word-wrap: break-word">JMS Source allows users to subscribe to a JMS broker and receive JMS messages. It has the ability to receive Map messages and Text messages.</p>
 
